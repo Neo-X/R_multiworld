@@ -71,14 +71,26 @@ class MujocoEnv(gym.Env):
         Implement this in each subclass.
         """
         raise NotImplementedError
-
-    def viewer_setup(self):
-        """
-        This method is called when the viewer is initialized and after every reset
-        Optionally implement this method, if you need to tinker with camera position
-        and so forth.
-        """
+    
+    def viewer_setup(self, visible=True, init_width=500, init_height=500):
         pass
+#         self.get_viewer(visible=visible, init_width=init_width, init_height=init_height)
+# #         self.viewer.cam.trackbodyid = -1
+# #         self.viewer.cam.distance = 6
+# #         self.viewer.cam.azimuth = 90.0
+# #         self.viewer.cam.elevation = -90.0
+# #         
+# #         self.viewer.cam.lookat[0] = 0
+# #         self.viewer.cam.lookat[1] = 1.2
+# #         self.viewer.cam.lookat[2] = 0
+
+    def get_viewer(self, visible=True, init_width=500, init_height=500):
+        if self.viewer is None:
+            self.viewer = mujoco_py.MjViewer(sim=self.sim)
+#             self.viewer.start()
+#             self.viewer.set_model(self.model)
+        return self.viewer
+
 
     # -----------------------------
 
@@ -116,7 +128,7 @@ class MujocoEnv(gym.Env):
             self._get_viewer().render()
             # window size used for old mujoco-py:
             width, height = 500, 500
-            width, height = 4000, 4000
+#             width, height = 4000, 4000
             data = self._get_viewer().read_pixels(width, height, depth=False)
             # original image is upside-down, so flip it
             return data[::-1, :, :]

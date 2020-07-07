@@ -35,6 +35,7 @@ class SawyerPushEnv( SawyerXYZEnv):
             camera_name = 'robotview_zoomed',
             mpl = 150,
             hide_goal = True,
+            render_env = False,
             hand_type = 'parallel_v1',
             **kwargs
     ):
@@ -84,9 +85,12 @@ class SawyerPushEnv( SawyerXYZEnv):
         self.hide_goal = hide_goal
         if self.image:
             self.set_image_obsSpace()
-
         else:
             self.set_state_obsSpace()
+            
+        self.render_env = render_env
+#         if (self.render_env):
+#             self.viewer_setup(visible=True, init_width=64, init_height=64)
 
     def set_image_obsSpace(self):
         if self.camera_name == 'robotview_zoomed':
@@ -136,7 +140,23 @@ class SawyerPushEnv( SawyerXYZEnv):
             done = True
         else:
             done = False
-        return ob, reward, done, OrderedDict({ 'reachDist':reachDist,  'placeDist': placeDist, 'epRew': reward})
+            
+        info = OrderedDict({ 'reachDist':reachDist,  'placeDist': placeDist, 'epRew': reward})
+        if self.render_env == "rgb_array":
+            img_ = self.render(mode="vis_nn")
+#             import matplotlib.pyplot as plt
+#             print("img_ shape", img_.shape, " sum: ", np.sum(img_))
+#             fig1 = plt.figure(1)
+#         plt.imshow(img_, origin='lower')
+#         plt.title("visual Data: ")
+#         fig1.savefig("viz_state_2.svg")
+#         print("saved figure")
+#         plt.show()
+        
+            info["rendering"] = np.array(img_, dtype=np.uint8)
+#             print ("info[rendering] shape: ", info["rendering"].shape)
+        
+        return ob, reward, done, info
 
     def _get_obs(self):
         
