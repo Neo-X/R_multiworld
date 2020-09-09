@@ -72,8 +72,10 @@ class SawyerXYZEnv(SawyerMocapBase, metaclass=abc.ABCMeta):
             hand_high=(0.5, 1, 0.5),
             action_scale=1/100,
             action_zangle_scale = 1/10,
+            render_env="",
             **kwargs
     ):
+        self.render_env=render_env
         super().__init__(*args, **kwargs)
         if hand_type == 'parallel_v1':
         	hand_low=(-0.5, 0.4, 0.05)
