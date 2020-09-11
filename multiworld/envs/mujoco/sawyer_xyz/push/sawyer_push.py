@@ -143,6 +143,7 @@ class SawyerPushEnv( SawyerXYZEnv):
             
         info = OrderedDict({ 'reachDist':reachDist,  'placeDist': placeDist, 'epRew': reward})
         if self.render_env == "rgb_array":
+            self.set_goal_visibility(visible = True)
             img_ = self.render(mode="vis_nn")
 #             import matplotlib.pyplot as plt
 #             print("img_ shape", img_.shape, " sum: ", np.sum(img_))
@@ -219,12 +220,11 @@ class SawyerPushEnv( SawyerXYZEnv):
 
     def set_goal_visibility(self , visible = False):
 
-        # site_id = self.model.site_name2id('goal')
-        # if visible:       
-        #     self.model.site_rgba[site_id][-1] = 1
-        # else:
-        #     self.model.site_rgba[site_id][-1] = 0
-        pass
+        site_id = self.model.site_name2id('goal')
+        if visible:       
+            self.model.site_rgba[site_id][-1] = 1
+        else:
+            pass
 
 
               
